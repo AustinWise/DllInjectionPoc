@@ -9,4 +9,15 @@
     <PublishAot>true</PublishAot>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!--
+      Uncomment the LinkerArg line below to demonstrate one possible fix.
+      This could be added to
+      https://github.com/dotnet/runtime/blob/main/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Windows.targets
+    -->
+    <!-- 
+      <LinkerArg Include="/DEPENDENTLOADFLAG:0x800" />
+    -->
+  </ItemGroup>
+
 </Project>

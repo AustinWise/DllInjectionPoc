@@ -7,7 +7,27 @@ partial class Program
 {
     public static void Main()
     {
-        IntPtr hModule = GetModuleHandleW("bcrypt");
+        AppDomain.CurrentDomain.UnhandledException += (_,_) =>
+        {
+            try
+            {
+                Test();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unexpected exception in UnhandledException handler");
+                Console.WriteLine(ex);
+            }
+            Environment.Exit(1);
+        };
+
+        // CoreCLR.dll delay loads version.dll and only loads it when the process crashes.
+        throw new Exception();
+    }
+
+    static void Test()
+    {
+        IntPtr hModule = GetModuleHandleW("version");
         if (hModule == IntPtr.Zero)
         {
             Console.WriteLine($"GetModuleHandleW failed: {Marshal.GetLastPInvokeErrorMessage()}");

@@ -1,5 +1,5 @@
-Similar to CVE-2023-28260, this is a DLL injection in programs created using
-.NET NativeAOT.
+This is a DLL injection in programs created using .NET when built in singlefile
+mode.
 
 This was tested with .NET 7.0.5.
 
@@ -8,26 +8,18 @@ This was tested with .NET 7.0.5.
 Expected output:
 
 ```
-c:\Windows\System32\bcrypt.dll
+c:\Windows\System32\version.dll
 ```
 
 Actual output:
 
 ```
-C:\temp\poc\bin\release\net7.0\win-x64\publish\bcrypt.dll
+C:\temp\poc\bin\release\net7.0\win-x64\publish\version.dll
 ```
+
+(where the above path is wherever you are currently running this program from)
 
 # How to fix
 
-Either remove all DLLs not in KnownDLLs from
-https://github.com/dotnet/runtime/blob/main/src/coreclr/nativeaot/BuildIntegration/WindowsAPIs.txt
-or add this to
-https://github.com/dotnet/runtime/blob/main/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Windows.targets
-
-```
-<ItemGroup>
-    <LinkerArg Include="/DEPENDENTLOADFLAG:0x800" />
-</ItemGroup>
-```
-
-An example of this approach is in `poc.csproj`.
+Apply the delay fix like https://github.com/dotnet/coreclr/pull/24449 to the
+single file host in https://github.com/dotnet/runtime/tree/main/src/native/corehost/apphost/static/

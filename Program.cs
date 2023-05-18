@@ -1,5 +1,8 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Net.Quic;
+using System.Net;
+using System.Net.Security;
 
 [assembly: DisableRuntimeMarshalling]
 
@@ -7,27 +10,21 @@ partial class Program
 {
     public static void Main()
     {
-        AppDomain.CurrentDomain.UnhandledException += (_,_) =>
+        // load the msquic.dll
+        var options = new QuicListenerOptions()
         {
-            try
+            ListenEndPoint = new IPEndPoint(IPAddress.Loopback, 8888),
+            ApplicationProtocols = new List<SslApplicationProtocol>()
             {
-                Test();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Unexpected exception in UnhandledException handler");
-                Console.WriteLine(ex);
-            }
-            Environment.Exit(1);
+                SslApplicationProtocol.Http3,
+            },
+            ConnectionOptionsCallback = (_, _, _) => default,
         };
+        _ = QuicListener.ListenAsync(options);
 
-        // CoreCLR.dll delay loads version.dll and only loads it when the process crashes.
-        throw new Exception();
-    }
-
-    static void Test()
-    {
-        IntPtr hModule = GetModuleHandleW("version");
+        // The rest of the code just prints where WINMM.dll has been loaded from.
+        
+        IntPtr hModule = GetModuleHandleW("WINMM");
         if (hModule == IntPtr.Zero)
         {
             Console.WriteLine($"GetModuleHandleW failed: {Marshal.GetLastPInvokeErrorMessage()}");

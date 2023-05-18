@@ -1,5 +1,11 @@
-This is a DLL injection in programs created using .NET when built in singlefile
-mode.
+This is a DLL injection in programs created using .NET 7 under the following
+conditions:
+* They use the QUIC protocol (which is a preview feature)
+* They publish as a self-contained program
+
+The problem is that if an attacker is able to place a DLL with the name `WINMM.dll`
+next to the `msquic.dll` deployed as part of .NET 7, it would be loaded instead
+of the correct one System32.
 
 This was tested with .NET 7.0.5.
 
@@ -8,18 +14,13 @@ This was tested with .NET 7.0.5.
 Expected output:
 
 ```
-c:\Windows\System32\version.dll
+c:\Windows\System32\WINMM.dll
 ```
 
 Actual output:
 
 ```
-C:\temp\poc\bin\release\net7.0\win-x64\publish\version.dll
+C:\temp\poc\bin\release\net7.0\win-x64\publish\WINMM.dll
 ```
 
 (where the above path is wherever you are currently running this program from)
-
-# How to fix
-
-Apply the delay fix like https://github.com/dotnet/coreclr/pull/24449 to the
-single file host in https://github.com/dotnet/runtime/tree/main/src/native/corehost/apphost/static/

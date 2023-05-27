@@ -10,7 +10,7 @@ of the correct one System32.
 The problem is not in how .NET loads this library. The problem is in how MSQuic
 references DLLs. This vulnerability applies to any system that uses `msquic.dll`.
 
-This was tested with .NET 7.0.5.
+This was tested with .NET 7.0.5. The MSQuic version is 2.1.1.0.
 
 `run.cmd` builds and runs the proof of concept.
 

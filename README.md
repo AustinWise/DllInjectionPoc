@@ -7,6 +7,9 @@ The problem is that if an attacker is able to place a DLL with the name `WINMM.d
 next to the `msquic.dll` deployed as part of .NET 7, it would be loaded instead
 of the correct one System32.
 
+The problem is not in how .NET loads this library. The problem is in how MSQuic
+references DLLs. This vulnerability applies to any system that uses `msquic.dll`.
+
 This was tested with .NET 7.0.5.
 
 `run.cmd` builds and runs the proof of concept.

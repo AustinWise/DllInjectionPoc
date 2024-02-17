@@ -8,13 +8,13 @@ This was tested with .NET 8.0.2.
 Expected output:
 
 ```
-c:\Windows\System32\bcrypt.dll
+c:\Windows\System32\version.dll
 ```
 
 Actual output:
 
 ```
-C:\temp\poc\bin\release\net7.0\win-x64\publish\bcrypt.dll
+C:\temp\poc\bin\release\net7.0\win-x64\publish\version.dll
 ```
 
 # How to fix

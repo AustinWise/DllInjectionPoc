@@ -7,7 +7,10 @@ partial class Program
 {
     public static void Main()
     {
-        IntPtr hModule = GetModuleHandleW("bcrypt");
+        // to force version.dll to be linked against
+        _ = System.Diagnostics.FileVersionInfo.GetVersionInfo(Environment.ProcessPath!);
+
+        IntPtr hModule = GetModuleHandleW("version");
         if (hModule == IntPtr.Zero)
         {
             Console.WriteLine($"GetModuleHandleW failed: {Marshal.GetLastPInvokeErrorMessage()}");
@@ -22,6 +25,7 @@ partial class Program
             return;
         }
 
+        Console.WriteLine("version.dll loaded from (if it's not in c:\\Windows somewhere, DLL injection happened):");
         Console.WriteLine(chars.Slice(0, len).ToString());
     }
 

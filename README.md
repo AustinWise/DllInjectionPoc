@@ -30,7 +30,9 @@ https://github.com/dotnet/runtime/blob/main/src/coreclr/nativeaot/BuildIntegrati
 </ItemGroup>
 ```
 
-An example of the second approach is in `poc.csproj`.
+An example of the second approach is in `poc.csproj`. See
+[Raymond Chen's post](https://devblogs.microsoft.com/oldnewthing/20230328-00/?p=107978)
+to learn more about this flag and the DLL injection problem in general.
 
 # MSRC response
 
@@ -42,3 +44,19 @@ They said it would be OK to post to the public bug tracker:
 > The native AOT behavior has been documented at https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/interop#direct-pinvoke-calls and it matches the default behavior of other native programming environments such as Microsoft C/C++.
 
 > You can go ahead and submit a pull request with the proposed patch. The discussion about this issue and the proposed patch can be held in public, given that this is a defense-in-depth issue for vNext consideration only.
+
+MSRC also [acknowledge](https://msrc.microsoft.com/update-guide/acknowledgement) my contribution and gave me a bug bounty.
+
+The [documention for NativeAOT interop](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/interop) was [added](https://github.com/dotnet/docs/pull/35352) to include the mitigation.
+
+# Further followup
+
+As defense in depth, I made [a PR](https://github.com/dotnet/runtime/pull/89311) for enabling `/DEPENDENTLOADFLAG` for all .NET executables.
+Unfortunatly this was [rolled back](https://github.com/dotnet/runtime/pull/95540)
+because it broke profile guided optimization. A [fix in the linker](https://github.com/dotnet/runtime/issues/95534#issuecomment-1837049309)
+is required.
+
+I also [proposed](https://github.com/dotnet/runtime/issues/98619)
+enabling this flag by default for NativeAOT apps.
+However the benefit from adding this flag did not outweight
+the potential failure modes.

@@ -51,10 +51,7 @@ The [documention for NativeAOT interop](https://learn.microsoft.com/en-us/dotnet
 
 # Further followup
 
-As defense in depth, I made [a PR](https://github.com/dotnet/runtime/pull/89311) for enabling `/DEPENDENTLOADFLAG` for all .NET executables.
-Unfortunatly this was [rolled back](https://github.com/dotnet/runtime/pull/95540)
-because it broke profile guided optimization. A [fix in the linker](https://github.com/dotnet/runtime/issues/95534#issuecomment-1837049309)
-is required.
+As defense in depth, I made [a PR](https://github.com/dotnet/runtime/pull/112359) for enabling `/DEPENDENTLOADFLAG` for all .NET executables.
 
 I also [proposed](https://github.com/dotnet/runtime/issues/98619)
 enabling this flag by default for NativeAOT apps.

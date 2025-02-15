@@ -1,16 +1,22 @@
-This is a DLL injection in programs created using .NET 9 under the following
-conditions:
-* They use the QUIC protocol
-* They publish as a self-contained program
+There is a DLL injection vulnerability in programs using the msquic.dll library.
+The msquic library is developed in the open at https://github.com/microsoft/msquic .
 
 The problem is that if an attacker is able to place a DLL with the name `WINMM.dll`
-next to the `msquic.dll` deployed as part of .NET 7, it would be loaded instead
+in the same directory as `msquic.dll`, it would be loaded instead
 of the correct one System32.
 
-The problem is not in how .NET loads this library. The problem is in how MSQuic
-references DLLs. This vulnerability applies to any system that uses `msquic.dll`.
+I have previously filed a case about this ( VULN-102108 ) and there was a fix ( https://github.com/microsoft/msquic/pull/3661 ).
+However it appears the fix was not effective.
+Using the `dumpbin /loadconfig` command, I confirmed that the following versions of msquic do not have
+the Dependent Load Flag set:
 
-This was tested with .NET 9.0.2. The MSQuic version is 2.4.3.
+* 2.3.0
+* 2.4.3
+* 2.4.7
+
+### POC
+
+This POC is written with .NET 9. I tested with .NET 9.0.2, which includes msquic 2.4.3.
 
 `run.cmd` builds and runs the proof of concept.
 

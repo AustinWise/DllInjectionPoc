@@ -10,6 +10,12 @@ partial class Program
 {
     public static void Main()
     {
+        if (!QuicListener.IsSupported)
+        {
+            Console.WriteLine("QUIC not supported");
+            return;
+        }
+
         // load the msquic.dll
         var options = new QuicListenerOptions()
         {
@@ -23,7 +29,7 @@ partial class Program
         _ = QuicListener.ListenAsync(options);
 
         // The rest of the code just prints where WINMM.dll has been loaded from.
-        
+
         IntPtr hModule = GetModuleHandleW("WINMM");
         if (hModule == IntPtr.Zero)
         {
